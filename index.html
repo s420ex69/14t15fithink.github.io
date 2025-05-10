@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Игровой портал</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#8A2BE2',secondary:'#4B0082'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Montserrat', sans-serif;
+background: linear-gradient(135deg, #1a1a1a, #121212);
+color: #e0e0e0;
+min-height: 100vh;
+position: relative;
+overflow-x: hidden;
+}
+.winter-theme {
+background: linear-gradient(135deg, #e8f4f8, #d1e8f0) !important;
+color: #2b6cb0 !important;
+}
+.winter-theme .glass-panel {
+background-color: rgba(255, 255, 255, 0.7) !important;
+border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.winter-theme .nav-button {
+color: #ffffff !important;
+}
+.winter-theme .nav-button:hover {
+color: #e2e8f0 !important;
+}
+.winter-theme .gradient-text {
+background: linear-gradient(90deg, #2b6cb0, #1e4e8c) !important;
+-webkit-background-clip: text !important;
+background-clip: text !important;
+}
+.winter-theme button {
+background-color: #2b6cb0 !important;
+}
+.winter-theme button:hover {
+background-color: #1e4e8c !important;
+}
+.winter-theme p {
+color: #2d3748 !important;
+}
+.winter-theme .text-gray-300,
+.winter-theme .text-gray-400 {
+color: #4a5568 !important;
+}
+.snowflake {
+position: fixed;
+top: -10px;
+color: white;
+font-size: 1em;
+text-shadow: 0 0 1px #000;
+animation: fall linear forwards;
+z-index: 1;
+}
+@keyframes fall {
+to {
+transform: translateY(100vh) rotate(360deg);
+}
+}
+.snow-bank {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+height: 80px;
+background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6));
+pointer-events: none;
+z-index: 1;
+opacity: 0;
+transition: opacity 0.5s ease;
+}
+.winter-theme .snow-bank {
+opacity: 1;
+}
+.snowman {
+position: fixed;
+bottom: 20px;
+right: 40px;
+font-size: 24px;
+z-index: 2;
+opacity: 0;
+transition: opacity 0.5s ease;
+pointer-events: none;
+}
+.winter-theme .snowman {
+opacity: 1;
+}
+.small-snow-bank {
+position: fixed;
+bottom: 0;
+height: 30px;
+background: rgba(255, 255, 255, 0.8);
+border-radius: 50% 50% 0 0;
+pointer-events: none;
+z-index: 1;
+opacity: 0;
+transition: opacity 0.5s ease;
+}
+.winter-theme .small-snow-bank {
+opacity: 1;
+}
+.small-snow-bank-1 {
+left: 20%;
+width: 100px;
+}
+.small-snow-bank-2 {
+left: 45%;
+width: 120px;
+}
+.small-snow-bank-3 {
+left: 70%;
+width: 90px;
+}
+.glass-panel {
+background-color: rgba(30, 30, 30, 0.6);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.nav-button {
+transition: all 0.3s ease;
+position: relative;
+}
+.nav-button::after {
+content: "";
+position: absolute;
+bottom: -4px;
+left: 0;
+width: 0;
+height: 2px;
+background: linear-gradient(90deg, #8A2BE2, #4B0082);
+transition: width 0.3s ease;
+}
+.nav-button:hover::after, .nav-button.active::after {
+width: 100%;
+}
+.nav-button.active {
+color: #8A2BE2;
+}
+.fade-enter {
+animation: fadeIn 0.5s forwards;
+}
+.fade-exit {
+animation: fadeOut 0.5s forwards;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+from { opacity: 1; transform: translateY(0); }
+to { opacity: 0; transform: translateY(10px); }
+}
+input, textarea {
+background-color: rgba(40, 40, 40, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.1);
+color: #e0e0e0;
+transition: all 0.3s ease;
+}
+input:focus, textarea:focus {
+border-color: #8A2BE2;
+box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
+outline: none;
+}
+.modal {
+animation: modalFadeIn 0.3s forwards;
+}
+@keyframes modalFadeIn {
+from { opacity: 0; transform: scale(0.95); }
+to { opacity: 1; transform: scale(1); }
+}
+.modal-overlay {
+animation: overlayFadeIn 0.3s forwards;
+}
+@keyframes overlayFadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+.news-item, .story-item {
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+transition: all 0.3s ease;
+}
+.news-item:hover, .story-item:hover {
+background-color: rgba(50, 50, 50, 0.4);
+}
+.gradient-text {
+background: linear-gradient(90deg, #9c59b6, #8A2BE2);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+}
+</style>
+</head>
+<body class="p-6 md:p-10">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
+<!-- Центральная панель -->
+<main id="main-panel" class="glass-panel rounded-xl p-6 w-full md:w-3/4 min-h-[80vh] overflow-y-auto">
+<!-- Контент для главной страницы (новости) -->
+<div id="news-content" class="fade-enter">
+<h1 class="text-2xl font-bold mb-6 gradient-text">Последние новости</h1>
+<div class="news-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Открытие нового сервера</h2>
+<span class="text-sm text-gray-400">10 мая 2025</span>
+</div>
+<p class="text-gray-300">Мы рады сообщить об открытии нового сервера "Фантазия". Присоединяйтесь к нам в эту субботу в 18:00 по московскому времени для участия в грандиозном открытии. Первые 100 игроков получат эксклюзивные предметы и бонусы. Не пропустите это событие!</p>
+</div>
+<div class="news-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Обновление системы крафта</h2>
+<span class="text-sm text-gray-400">5 мая 2025</span>
+</div>
+<p class="text-gray-300">В последнем обновлении мы полностью переработали систему крафта. Теперь вы можете создавать более сложные предметы, используя новую систему комбинирования ресурсов. Добавлено более 50 новых рецептов и 3 уровня мастерства. Изучайте новые возможности и становитесь лучшими мастерами на сервере!</p>
+</div>
+<div class="news-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Турнир PvP "Арена героев"</h2>
+<span class="text-sm text-gray-400">28 апреля 2025</span>
+</div>
+<p class="text-gray-300">Приглашаем всех желающих принять участие в ежемесячном турнире PvP "Арена героев". Регистрация команд уже открыта и продлится до 15 мая. Победителей ждут ценные призы и уникальные титулы. Формат турнира: 3 на 3, круговая система. Подробные правила доступны на нашем Discord-сервере.</p>
+</div>
+<div class="news-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Конкурс строителей</h2>
+<span class="text-sm text-gray-400">20 апреля 2025</span>
+</div>
+<p class="text-gray-300">Объявляем о начале конкурса строителей "Архитектурное чудо". Тема конкурса: "Фэнтезийные города". У вас есть 2 недели на создание своего шедевра. Лучшие работы будут размещены в специальной галерее на главной площади сервера, а победители получат эксклюзивные наборы для строительства и декоративные блоки.</p>
+</div>
+<div class="news-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Обновление клиента игры</h2>
+<span class="text-sm text-gray-400">15 апреля 2025</span>
+</div>
+<p class="text-gray-300">Выпущено обязательное обновление клиента игры до версии 2.8.5. В новой версии исправлены критические ошибки безопасности, оптимизирована производительность и добавлена поддержка новых текстур высокого разрешения. Обновление доступно через лаунчер. Пожалуйста, обновите клиент до 20 апреля.</p>
+</div>
+</div>
+<!-- Контент для историй (скрыт по умолчанию) -->
+<div id="stories-content" class="hidden">
+<h1 class="text-2xl font-bold mb-6 gradient-text">Истории игроков</h1>
+<div class="mb-6">
+<button id="add-story-btn" class="bg-primary hover:bg-opacity-80 text-white px-4 py-2 rounded-button flex items-center gap-2 whitespace-nowrap">
+<span class="w-5 h-5 flex items-center justify-center">
+<i class="ri-add-line"></i>
+</span>
+<span>Добавить историю</span>
+</button>
+</div>
+<div id="stories-list">
+<div class="story-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Как я нашел древний храм</h2>
+<span class="text-sm text-gray-400">Автор: DarkExplorer</span>
+</div>
+<p class="text-gray-300">Это случилось во время моей экспедиции в Южные пустоши. Я исследовал регион уже третий день, когда заметил странное свечение за дюнами. Решив проверить источник света, я обнаружил вход в древний храм, скрытый песками. Внутри меня ждали ловушки и головоломки, но также и сокровища, которые не видел никто уже сотни лет. Самым ценным оказался артефакт "Око пустыни", дающий способность видеть сквозь песчаные бури. Теперь я планирую организовать большую экспедицию и полностью исследовать этот загадочный храм.</p>
+</div>
+<div class="story-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Битва за Северную крепость</h2>
+<span class="text-sm text-gray-400">Автор: IronCommander</span>
+</div>
+<p class="text-gray-300">Наш клан "Стальной кулак" готовился к этой битве целый месяц. Мы собрали лучшее снаряжение, тренировались в тактических построениях и изучали слабые места Северной крепости. В день штурма нас было 50 человек против гарнизона из 30 защитников. Битва началась на рассвете и продолжалась почти 4 часа реального времени. Мы потеряли много бойцов, но в итоге смогли прорваться через главные ворота и захватить знамя противника. Теперь Северная крепость принадлежит нашему клану, и мы уже начали её перестройку. Это была самая эпичная битва в моей игровой карьере!</p>
+</div>
+<div class="story-item p-4 mb-6 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">Моя первая легендарка</h2>
+<span class="text-sm text-gray-400">Автор: LuckyHunter</span>
+</div>
+<p class="text-gray-300">Я фармил подземелье "Логово дракона" уже 37-й раз. Все мои друзья уже давно получили легендарные предметы из этого данжа, а мне постоянно не везло. И вот, на 38-м прохождении, когда я уже почти отчаялся, с последнего босса выпадает легендарный лук "Шёпот ветра"! Я не мог поверить своим глазам. Статы на луке оказались почти идеальными, а дополнительный эффект "Призыв вихря" делает его одним из лучших оружий для моего класса. Теперь мой урон вырос на 40%, и я наконец-то могу присоединиться к рейдам высокого уровня. Никогда не сдавайтесь, друзья, удача обязательно улыбнётся и вам!</p>
+</div>
+</div>
+<!-- Форма добавления истории (скрыта по умолчанию) -->
+<div id="add-story-form" class="hidden glass-panel p-6 rounded-xl mb-6">
+<h2 class="text-xl font-semibold mb-4">Добавить новую историю</h2>
+<div class="mb-4">
+<label for="story-nickname" class="block mb-2 text-sm font-medium">Ваш никнейм</label>
+<input type="text" id="story-nickname" class="w-full px-4 py-2 rounded-md border-none" placeholder="Введите ваш никнейм">
+</div>
+<div class="mb-4">
+<label for="story-title" class="block mb-2 text-sm font-medium">Заголовок истории</label>
+<input type="text" id="story-title" class="w-full px-4 py-2 rounded-md border-none" placeholder="Введите заголовок вашей истории">
+</div>
+<div class="mb-6">
+<label for="story-content" class="block mb-2 text-sm font-medium">Текст истории</label>
+<textarea id="story-content" rows="6" class="w-full px-4 py-2 rounded-md border-none" placeholder="Расскажите вашу историю..."></textarea>
+</div>
+<div class="flex gap-3">
+<button id="submit-story" class="bg-primary hover:bg-opacity-80 text-white px-4 py-2 rounded-button whitespace-nowrap">Опубликовать</button>
+<button id="cancel-story" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-button whitespace-nowrap">Отмена</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Боковая панель -->
+<aside class="glass-panel rounded-xl p-6 w-full md:w-1/4">
+<div class="font-['Pacifico'] text-2xl text-center mb-8 gradient-text">logo</div>
+<nav class="mb-10">
+<h3 class="text-lg font-semibold mb-4 text-gray-300">Навигация</h3>
+<ul class="space-y-3">
+<li>
+<button id="nav-home" class="nav-button active w-full text-left px-3 py-2 hover:text-primary flex items-center gap-2 whitespace-nowrap">
+<span class="w-5 h-5 flex items-center justify-center">
+<i class="ri-home-line"></i>
+</span>
+<span>Главная</span>
+</button>
+</li>
+<li>
+<button id="nav-stories" class="nav-button w-full text-left px-3 py-2 hover:text-primary flex items-center gap-2 whitespace-nowrap">
+<span class="w-5 h-5 flex items-center justify-center">
+<i class="ri-book-open-line"></i>
+</span>
+<span>Истории</span>
+</button>
+</li>
+<li>
+<button id="nav-donate" class="nav-button w-full text-left px-3 py-2 hover:text-primary flex items-center gap-2 whitespace-nowrap">
+<span class="w-5 h-5 flex items-center justify-center">
+<i class="ri-hand-heart-line"></i>
+</span>
+<span>Донат</span>
+</button>
+</li>
+</ul>
+</nav>
+<div class="border-t border-gray-700 pt-6">
+<h3 class="text-lg font-semibold mb-4 text-gray-300">Информация</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<span class="w-5 h-5 flex items-center justify-center text-primary">
+<i class="ri-discord-line"></i>
+</span>
+<a href="https://discord.gg/gamecommunity" class="hover:text-primary transition-colors">discord.gg/gamecommunity</a>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-5 h-5 flex items-center justify-center text-primary">
+<i class="ri-server-line"></i>
+</span>
+<span>IP: play.gameserver.com</span>
+</div>
+</div>
+</div>
+<div class="mt-10 pt-6 border-t border-gray-700">
+<div class="text-sm text-gray-400 text-center">
+<p>Онлайн игроков: 1,248</p>
+<p class="mt-1">Последнее обновление: 10.05.2025</p>
+</div>
+</div>
+</aside>
+</div>
+<!-- Модальное окно для доната -->
+<div id="donate-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<div class="modal-overlay absolute inset-0 bg-black bg-opacity-70"></div>
+<div class="modal glass-panel rounded-xl p-6 w-full max-w-md relative z-10">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-semibold gradient-text">Поддержать проект</h2>
+<button id="close-modal" class="text-gray-400 hover:text-white">
+<span class="w-6 h-6 flex items-center justify-center">
+<i class="ri-close-line ri-lg"></i>
+</span>
+</button>
+</div>
+<div class="mb-6">
+<p class="text-gray-300 mb-4">Поддержите развитие нашего проекта! Ваши пожертвования помогают нам создавать новый контент, улучшать сервера и проводить интересные мероприятия.</p>
+<div class="glass-panel p-4 rounded-lg mb-4">
+<p class="font-semibold mb-2">Сайт для доната:</p>
+<a href="https://donate.gameserver.com" class="text-primary hover:underline">https://donate.gameserver.com</a>
+</div>
+<p class="text-sm text-gray-400">Все донатеры получают специальный статус на сервере и доступ к эксклюзивным возможностям.</p>
+</div>
+<div class="flex flex-wrap gap-3 justify-center">
+<a href="https://donate.gameserver.com" class="bg-primary hover:bg-opacity-80 text-white px-6 py-3 rounded-button whitespace-nowrap flex items-center gap-2">
+<span class="w-5 h-5 flex items-center justify-center">
+<i class="ri-gift-line"></i>
+</span>
+<span>Поддержать проект</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+function createSnowflake() {
+const snowflake = document.createElement('div');
+snowflake.classList.add('snowflake');
+snowflake.style.left = Math.random() * window.innerWidth + 'px';
+snowflake.style.opacity = Math.random();
+snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+snowflake.innerHTML = '❄';
+document.body.appendChild(snowflake);
+snowflake.addEventListener('animationend', () => {
+snowflake.remove();
+});
+}
+function startSnowfall() {
+setInterval(createSnowflake, 100);
+}
+function checkWinterSeason() {
+const now = new Date();
+const month = now.getMonth() + 1;
+const day = now.getDate();
+return (month === 12 && day >= 20) || (month === 1 && day <= 5);
+}
+const snowBank = document.createElement('div');
+snowBank.classList.add('snow-bank');
+document.body.appendChild(snowBank);
+const snowman = document.createElement('div');
+snowman.classList.add('snowman');
+snowman.innerHTML = '⛄';
+document.body.appendChild(snowman);
+const smallSnowBank1 = document.createElement('div');
+smallSnowBank1.classList.add('small-snow-bank', 'small-snow-bank-1');
+document.body.appendChild(smallSnowBank1);
+const smallSnowBank2 = document.createElement('div');
+smallSnowBank2.classList.add('small-snow-bank', 'small-snow-bank-2');
+document.body.appendChild(smallSnowBank2);
+const smallSnowBank3 = document.createElement('div');
+smallSnowBank3.classList.add('small-snow-bank', 'small-snow-bank-3');
+document.body.appendChild(smallSnowBank3);
+let isWinterTheme = false;
+function toggleWinterTheme() {
+isWinterTheme = !isWinterTheme;
+document.body.classList.toggle('winter-theme');
+if (isWinterTheme) {
+startSnowfall();
+} else {
+const snowflakes = document.querySelectorAll('.snowflake');
+snowflakes.forEach(flake => flake.remove());
+}
+}
+if (checkWinterSeason()) {
+toggleWinterTheme();
+}
+// Элементы навигации
+const navHome = document.getElementById('nav-home');
+const navStories = document.getElementById('nav-stories');
+const navDonate = document.getElementById('nav-donate');
+// Контентные блоки
+const newsContent = document.getElementById('news-content');
+const storiesContent = document.getElementById('stories-content');
+// Модальное окно доната
+const donateModal = document.getElementById('donate-modal');
+const closeModal = document.getElementById('close-modal');
+// Элементы для добавления историй
+const addStoryBtn = document.getElementById('add-story-btn');
+const addStoryForm = document.getElementById('add-story-form');
+const submitStory = document.getElementById('submit-story');
+const cancelStory = document.getElementById('cancel-story');
+const storyNickname = document.getElementById('story-nickname');
+const storyTitle = document.getElementById('story-title');
+const storyContent = document.getElementById('story-content');
+const storiesList = document.getElementById('stories-list');
+// Функция переключения активного пункта навигации
+function setActiveNavItem(activeItem) {
+[navHome, navStories, navDonate].forEach(item => {
+item.classList.remove('active');
+});
+activeItem.classList.add('active');
+}
+// Переключение на главную
+navHome.addEventListener('click', function() {
+setActiveNavItem(navHome);
+// Анимация смены контента
+newsContent.classList.remove('hidden');
+storiesContent.classList.add('hidden');
+// Скрываем форму добавления истории если она открыта
+addStoryForm.classList.add('hidden');
+});
+// Переключение на истории
+navStories.addEventListener('click', function() {
+setActiveNavItem(navStories);
+// Анимация смены контента
+newsContent.classList.add('hidden');
+storiesContent.classList.remove('hidden');
+});
+// Открытие модального окна доната
+navDonate.addEventListener('click', function() {
+setActiveNavItem(navDonate);
+donateModal.classList.remove('hidden');
+});
+// Закрытие модального окна
+closeModal.addEventListener('click', function() {
+donateModal.classList.add('hidden');
+setActiveNavItem(navHome);
+});
+// Закрытие модального окна при клике на оверлей
+donateModal.addEventListener('click', function(e) {
+if (e.target === donateModal) {
+donateModal.classList.add('hidden');
+setActiveNavItem(navHome);
+}
+});
+// Открытие формы добавления истории
+addStoryBtn.addEventListener('click', function() {
+addStoryForm.classList.remove('hidden');
+});
+// Отмена добавления истории
+cancelStory.addEventListener('click', function() {
+addStoryForm.classList.add('hidden');
+storyNickname.value = '';
+storyTitle.value = '';
+storyContent.value = '';
+});
+// Добавление новой истории
+submitStory.addEventListener('click', function() {
+const nickname = storyNickname.value.trim();
+const title = storyTitle.value.trim();
+const content = storyContent.value.trim();
+if (nickname.length > 12) {
+storyNickname.style.borderColor = '#ff4d4d';
+setTimeout(() => {
+storyNickname.style.borderColor = '';
+}, 2000);
+return;
+}
+if (nickname && title && content) {
+// Создаем новую историю
+const newStory = document.createElement('div');
+newStory.className = 'story-item p-4 mb-6 rounded-lg';
+newStory.innerHTML = `
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-xl font-semibold">${title}</h2>
+<span class="text-sm text-gray-400">Автор: ${nickname}</span>
+</div>
+<p class="text-gray-300">${content}</p>
+`;
+// Добавляем в начало списка
+storiesList.insertBefore(newStory, storiesList.firstChild);
+// Очищаем и скрываем форму
+storyNickname.value = '';
+storyTitle.value = '';
+storyContent.value = '';
+addStoryForm.classList.add('hidden');
+// Добавляем анимацию появления
+newStory.style.opacity = '0';
+newStory.style.transform = 'translateY(10px)';
+setTimeout(() => {
+newStory.style.transition = 'all 0.5s ease';
+newStory.style.opacity = '1';
+newStory.style.transform = 'translateY(0)';
+}, 10);
+} else {
+// Подсвечиваем незаполненные поля
+if (!nickname) storyNickname.style.borderColor = '#ff4d4d';
+if (!title) storyTitle.style.borderColor = '#ff4d4d';
+if (!content) storyContent.style.borderColor = '#ff4d4d';
+// Сбрасываем подсветку через некоторое время
+setTimeout(() => {
+storyNickname.style.borderColor = '';
+storyTitle.style.borderColor = '';
+storyContent.style.borderColor = '';
+}, 2000);
+}
+});
+// Сброс подсветки ошибок при вводе
+[storyNickname, storyTitle, storyContent].forEach(field => {
+field.addEventListener('input', function() {
+this.style.borderColor = '';
+});
+});
+});
+</script>
+</body>
+</html>
